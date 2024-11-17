@@ -131,6 +131,7 @@ def check_create_tasks(tasks, ex_tasks, label, due_date, apikey, project_id, sec
 
         if not found_flag:
             print(f"{label} Task not found")
+            print("Creating Task")
 
             payload = {
                 "content": task,
@@ -187,8 +188,10 @@ def main():
     tasks = tasks_resp.json()
 
     check_create_tasks(w_tasks, tasks, "Weekly", week_data['End_Date'], apikey, project_id, section_id)
-    if week_data['DayNum'] != 6:
+    if week_data['WeekdayNum'] != 6:
         check_create_tasks(d_tasks, tasks, "Daily", week_data['Today_str'], apikey, project_id, section_id)
+    else:
+        print("Today is Sunday, no daily tasks to create.")
 
 
 
