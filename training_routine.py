@@ -57,7 +57,7 @@ def define_week_info(seed_day):
 
 
 def project_check(project_name, T_HEADER):
-    print(f"Checking project '{project_name}' exists")
+    print(f"Checking project '{project_name}' Status")
     projects_resp = requests.get(f"{TODO_BASE_URL}/v2/projects",headers=T_HEADER)
     print(projects_resp)
     if projects_resp.status_code == 200:
@@ -74,6 +74,7 @@ def project_check(project_name, T_HEADER):
 
 def create_project(project_name, apikey):
 
+    print(f"Creating Project: {project_name}")
     payload = {"name":project_name}
     headers = {
             'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ def create_project(project_name, apikey):
 
 
 def section_check(project_id, section_name, T_HEADER):
-    print(f"Checking section {section_name} exists")
+    print(f"Checking section '{section_name}' exists")
     try:
         #sections = api.get_sections(project_id=str(project_id))
         sections_resp = requests.get(f"{TODO_BASE_URL}/v2/sections?project_id={project_id}", headers=T_HEADER)
@@ -106,6 +107,7 @@ def section_check(project_id, section_name, T_HEADER):
 
 def create_section(project_id, section_name, apikey):
 
+    print(f"Create Section: {section_name}")
     payload = {"parent_id":project_id, "name":section_name}
     headers = {
             'Content-Type': 'application/json',
@@ -151,6 +153,11 @@ def main():
     today = datetime.datetime.today()
     week_data = define_week_info(today)
 
+    print(today)
+    print("Week Data:")
+    for k,v in week_data.items():
+        print(f"{k}: {v}")
+
     load_dotenv()
     apikey = os.getenv('TODOIST_APIKEY')
 
@@ -174,6 +181,7 @@ def main():
         d_tasks = [ DAILY_GOAL_NAMING_FORMAT.format(week_data['DayNum'], task) for task in play_week_goals['Daily'] ]
         w_tasks = [ WEEKLY_GOAL_NAMING_FORMAT.format(week_data['WeekNum'], task) for task in play_week_goals['Weekly'] ]
 
+    print("Colleting active tasks:")
     tasks_resp = requests.get(f"{TODO_BASE_URL}/v2/tasks?project_id={project_id}&section_id={section_id}", headers=T_HEADER)
     print(tasks_resp)
     tasks = tasks_resp.json()
