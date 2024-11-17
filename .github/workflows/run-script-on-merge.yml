@@ -1,0 +1,31 @@
+name: Run Script on Merge
+
+on:
+  push:
+    branches:
+      - main  # Trigger only on pushes to the main branch
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Checks out the repository code
+
+      - name: Set up environment
+        run: |
+          echo "Setting up environment variables..."
+        env:
+          UNAME: ${{ secrets.UNAME }}
+          PA_TOKEN: ${{ secrets.PA_TOKEN }}
+
+      - name: Run the script
+        run: |
+          echo "Running the script..."
+          # Replace 'your-script.sh' or equivalent with your script
+          chmod +x ./deploy.sh
+          ./deploy.sh $UNAME $PA_TOKEN training_routine.py /home/$UNAME/chess_routine/training_routine.py
+        env:
+          UNAME: ${{ secrets.UNAME }}
+          PA_TOKEN: ${{ secrets.PA_TOKEN }}
