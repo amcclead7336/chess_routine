@@ -108,7 +108,7 @@ def section_check(project_id, section_name, T_HEADER):
 def create_section(project_id, section_name, apikey):
 
     print(f"Create Section: {section_name}")
-    payload = {"parent_id":project_id, "name":section_name}
+    payload = {"project_id":project_id, "name":section_name}
     headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {apikey}',
